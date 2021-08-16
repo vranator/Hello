@@ -1,0 +1,44 @@
+// this code successfully passes up to Set 1, Stage 4
+
+addLineSensor(22, -9, 0, 255, 0) // (0) left front
+addLineSensor(22, 9, 0, 255, 0) // (1) right front
+
+addLineSensor(0, 0, 255, 0, 0) // (2) stop sensor - red component
+addLineSensor(0, 0, 0, 255, 255) // (3) stop sensor - non-red component
+
+addLineSensor(10, -9, 255, 0, 255) // (4) left junction
+addLineSensor(10, 9, 255, 0, 255) // (5) right junction
+
+let stop = false
+while (!stop) {
+  let l = readSensor(0) > 0.5 // left seeing light
+  let r = readSensor(1) > 0.5 // right seeing light
+
+  let lj = readSensor(4) // 
+  let rj = readSensor(5) // 
+
+  stop = readSensor(2) > 0.5 && readSensor(3) < 0.4
+
+  if (l && r) {
+    forward(2)
+  } else if (l && !r) {
+      right(3)
+      forward(1)
+  } else if (!l && r) {
+      left(3)
+      forward(1)
+  } else {
+
+      // whichever sensor is darker, turn that way
+
+      if (lj < rj) {
+          left(5)
+          forward(1)
+      } else if (lj > rj) {
+          right(5)
+          forward(1)
+      } else {
+      forward(1)
+      }
+  }
+}
